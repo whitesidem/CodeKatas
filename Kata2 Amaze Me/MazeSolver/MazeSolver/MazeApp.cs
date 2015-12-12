@@ -57,31 +57,33 @@ namespace MazeSolver
             if (finish == null) throw new Exception("Maze should have a finish position set.");
 
             var maze = new MazeGrid(grid, start, finish);
-            var entity = new DumbMazeWalker(maze);
+            var walker = new DumbMazeWalker(maze);
 
             bool endOfMazeReached = false;
 
             while (!endOfMazeReached)
             {
-                var couldMoveForward = entity.MoveForward();
+                walker.MakeMove();
+                    
 
-                if (!couldMoveForward)
-                {
-                    entity.TurnRight();
-                }
-                else
-                {
-                    if (entity.CanSeeLeftTurning())
-                    {
-                        entity.TurnLeft();
-                    }
-                }
+                //if (!couldMoveForward)
+                //{
+                //    entity.TurnRight();
+                //}
+                //else
+                //{
+                //    if (entity.CanSeeLeftTurning())
+                //    {
+                //        entity.TurnLeft();
+                //    }
+                //}
 
-                endOfMazeReached = maze.AtFinish(entity);
-                Console.WriteLine(entity.CurrentPosition);
+                endOfMazeReached = maze.AtFinish(walker);
+                Console.WriteLine(walker.CurrentPosition);
             }
 
             Console.WriteLine("Reached end of maze! :)");
         }
+
     }
 }

@@ -1,10 +1,10 @@
 ﻿namespace MazeSolver
 {
-    internal enum Orientation
-    {
-        North,
-        South,
-        East,
-        West
-    }
+    //internal enum Orientation
+    //{
+    //    North,
+    //    South,
+    //    East,
+    //    West
+    //}
 }
