@@ -43,8 +43,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DumbMazeWalker.cs" />
+    <Compile Include="Factories\CreateMazefactory.cs" />
+    <Compile Include="GameState.cs" />
+    <Compile Include="IWalkTheMaze.cs" />
     <Compile Include="MazeGrid.cs" />
     <Compile Include="MazeApp.cs" />
+    <Compile Include="MazeSolverProcess.cs" />
     <Compile Include="Orientation.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

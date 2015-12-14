@@ -1,22 +1,35 @@
 ﻿namespace MazeSolver
 {
-    public class DumbMazeWalker
+    public class DumbMazeWalker : IWalkTheMaze
     {
-        private readonly MazeGrid m_MazeGrid;
+        private  MazeGrid _mazeGrid;
  //       private Orientation m_direc;
         private OrientatedWalk _orientatedWalk;
+        public Point CurrentPosition { get; set; }
 
-        public DumbMazeWalker(MazeGrid mazeGrid)
+        public void SetMazeGrid(MazeGrid mazegrid)
         {
-            m_MazeGrid = mazeGrid;
-            CurrentPosition = m_MazeGrid.StartPosition;
-  //          m_direc = Orientation.South;
+            _mazeGrid = mazegrid;
+            CurrentPosition = _mazeGrid.StartPosition;
+            //          m_direc = Orientation.South;
             _orientatedWalk = new SouthOrientatedWalk();
         }
 
-        public bool CanTurnLeft()
+        public void MakeMove()
         {
-            return _orientatedWalk.CanSeeLeftTurning(CurrentPosition, m_MazeGrid.Grid);
+            if (CanMoveForward() == false)
+            {
+                TurnRight();
+                return;
+            }
+            MoveForward();
+            TurnLeftIfPossible();
+        }
+
+
+        private bool CanTurnLeft()
+        {
+            return _orientatedWalk.CanSeeLeftTurning(CurrentPosition, _mazeGrid.Grid);
 
             //switch (m_direc)
             //{
@@ -39,9 +52,8 @@
             //return m_MazeGrid.Grid[pointToOurLeft.Y][pointToOurLeft.X];
         }
 
-        public Point CurrentPosition { get; set; }
 
-        public void TurnRight()
+        private void TurnRight()
         {
             _orientatedWalk = _orientatedWalk.TurnRight();
             //switch (m_direc)
@@ -63,7 +75,7 @@
             //}
         }
 
-        public void TurnLeft()
+        private void TurnLeft()
         {
             _orientatedWalk = _orientatedWalk.TurnLeft();
             //switch (m_direc)
@@ -85,12 +97,12 @@
             //}
         }
 
-        public bool CanMoveForward()
+        private bool CanMoveForward()
         {
-            return _orientatedWalk.CanMoveForward(m_MazeGrid.Grid, CurrentPosition);
+            return _orientatedWalk.CanMoveForward(_mazeGrid.Grid, CurrentPosition);
         }
 
-        public void MoveForward()
+        private void MoveForward()
         {
             CurrentPosition = new Point(_orientatedWalk.GetDesiredForwardPosition(CurrentPosition));
             
@@ -119,18 +131,8 @@
             //return canMoveForward;
         }
 
-        public void MakeMove()
-        {
-            if (CanMoveForward() == false)
-            {
-                TurnRight();
-                return;
-            }
-            MoveForward();
-            TurnLeftIfPossible();
-        }
 
-        public virtual void TurnLeftIfPossible()
+        private void TurnLeftIfPossible()
         {
             if (CanTurnLeft())
             {

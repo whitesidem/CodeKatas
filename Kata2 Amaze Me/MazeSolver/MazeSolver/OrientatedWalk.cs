@@ -5,11 +5,11 @@
         public abstract OrientatedWalk TurnRight();
         public abstract OrientatedWalk TurnLeft();
         public abstract Point GetDesiredForwardPosition(Point currentPosition);
-        public abstract bool CanSeeLeftTurning(Point currentPosition, bool[][] grid);
-        public bool CanMoveForward(bool[][] grid, Point currentPosition)
+        public abstract bool CanSeeLeftTurning(Point currentPosition, MazeItem[][] grid);
+        public bool CanMoveForward(MazeItem[][] grid, Point currentPosition)
         {
             var deiredPos = GetDesiredForwardPosition(currentPosition);
-            return grid[deiredPos.Y][deiredPos.X];
+            return grid[deiredPos.Y][deiredPos.X].IsPath;
         }
 
     }
@@ -17,9 +17,9 @@
     public class NorthOrientatedWalk : OrientatedWalk
     {
 
-        public override bool CanSeeLeftTurning(Point currentPosition, bool[][] grid)
+        public override bool CanSeeLeftTurning(Point currentPosition, MazeItem[][] grid)
         {
-            return grid[currentPosition.Y][currentPosition.X - 1];
+            return grid[currentPosition.Y][currentPosition.X - 1].IsPath;
         }
 
         public override OrientatedWalk TurnRight()
@@ -42,9 +42,9 @@
     public class SouthOrientatedWalk : OrientatedWalk
     {
 
-        public override bool CanSeeLeftTurning(Point currentPosition, bool[][] grid)
+        public override bool CanSeeLeftTurning(Point currentPosition, MazeItem[][] grid)
         {
-            return grid[currentPosition.Y][currentPosition.X + 1];
+            return grid[currentPosition.Y][currentPosition.X + 1].IsPath;
         }
 
         public override OrientatedWalk TurnRight()
@@ -66,9 +66,9 @@
 
     public class EastOrientatedWalk : OrientatedWalk
     {
-        public override bool CanSeeLeftTurning(Point currentPosition, bool[][] grid)
+        public override bool CanSeeLeftTurning(Point currentPosition, MazeItem[][] grid)
         {
-            return grid[currentPosition.Y - 1][currentPosition.X];
+            return grid[currentPosition.Y - 1][currentPosition.X].IsPath;
         }
 
         public override OrientatedWalk TurnRight()
@@ -89,9 +89,9 @@
 
     public class WestOrientatedWalk : OrientatedWalk
     {
-        public override bool CanSeeLeftTurning(Point currentPosition, bool[][] grid)
+        public override bool CanSeeLeftTurning(Point currentPosition, MazeItem[][] grid)
         {
-            return grid[currentPosition.Y + 1][currentPosition.X];
+            return grid[currentPosition.Y + 1][currentPosition.X].IsPath;
         }
 
         public override OrientatedWalk TurnRight()
