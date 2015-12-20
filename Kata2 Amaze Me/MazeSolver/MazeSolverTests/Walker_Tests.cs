@@ -257,7 +257,9 @@ namespace MazeSolverTests
             Assert.That(_latestgameState.CurrentPosition.X, Is.EqualTo(expectedXPos), "unexpecte end X pos");
         }
 
-
-
     }
 }
+
+
+
+           

@@ -49,6 +49,7 @@
     <Compile Include="IWalkTheMaze.cs" />
     <Compile Include="MazeGrid.cs" />
     <Compile Include="MazeApp.cs" />
+    <Compile Include="MazePresenter.cs" />
     <Compile Include="MazeSolverProcess.cs" />
     <Compile Include="Orientation.cs" />
     <Compile Include="Point.cs" />
