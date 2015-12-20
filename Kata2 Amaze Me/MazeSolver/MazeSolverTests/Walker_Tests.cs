@@ -90,7 +90,6 @@ namespace MazeSolverTests
             };
             var expectedXPos = 3;
             var expectedYPos = 5;
-            var expectedMoveCount = 14;
 
             _mazeSolver.MazeStateChangeEvent += gameState =>
             {
@@ -130,6 +129,125 @@ namespace MazeSolverTests
 
             _mazeSolver.SolveMaze(mazeLines, new DumbMazeWalker());
             Assert.Fail("Should not reach here as it cannot solve this maze");
+        }
+
+
+
+        [Test]
+        public void SolveMaze3_WithCleverWalkerStartingAtSouthEntrance()
+        {
+            var mazeLines = new string[]
+            {
+                "# # # # # # #",
+                "# # # . # # #",
+                "# . . . . . #",
+                "# . # # # . #",
+                "# . # F # . #",
+                "# . # . # . #",
+                "# . . . . . #",
+                "# # # S # # #"            
+            };
+            var expectedXPos = 3;
+            var expectedYPos = 4;
+
+            _mazeSolver.MazeStateChangeEvent += gameState =>
+            {
+                Assert.That(gameState.MoveCounter, Is.LessThanOrEqualTo(1000));
+                Console.WriteLine(gameState);
+                _latestgameState = gameState;
+            };
+
+            _mazeSolver.SolveMaze(mazeLines, new CleverMazeWalker());
+
+            AssertGameState(expectedYPos, expectedXPos);
+        }
+
+        [Test]
+        public void SolveMaze4_VeryComplex()
+        {
+            var mazeLines = new string[]
+            {
+                "# # # # # # # # # # # # # # #",
+                "# . . . . . . # . . # . . . #",
+                "# . # . # . # # # . # . # # #",
+                "# . # . # . # . . . # . # # #" ,
+                "# . # . # . # . # . # . . . #",
+                "# . # . # . . . # . # . # F #",
+                "# . # . # # # # # . # . # # #",
+                "# . . . . . . . # . # . # # #",
+                "# . # # # # # . # . . . # # #",
+                "# . # . . . # . # # # # # # #",
+                "# . # . # . . . . . . . # # #",
+                "# # # S # # # # # # # # # # #"            
+            };
+            var expectedXPos = 13;
+            var expectedYPos = 5;
+
+            _mazeSolver.MazeStateChangeEvent += gameState =>
+            {
+                Assert.That(gameState.MoveCounter, Is.LessThanOrEqualTo(1000));
+                Console.WriteLine(gameState);
+                _latestgameState = gameState;
+            };
+
+            _mazeSolver.SolveMaze(mazeLines, new CleverMazeWalker());
+
+            AssertGameState(expectedYPos, expectedXPos);
+        }
+
+        [TestCase(1,1)]
+        [TestCase(1,2)]
+        [TestCase(1,3)]
+        [TestCase(1,4)]
+        [TestCase(1,5)]
+        [TestCase(1,6)]
+        [TestCase(1,7)]
+        [TestCase(1,7)]
+        [TestCase(1,8)]
+        [TestCase(1,13)]
+        [TestCase(5,13)]
+        [TestCase(8,11)]
+        [TestCase(2,11)]
+        [TestCase(10,1)]
+        public void SolveMaze4_VeryComplex(int yFinish, int xFinish)
+        {
+            var mazeLines = new string[]
+            {
+                "# # # # # # # # # # # # # # #",
+                "# . . . . . . . # # # . . . #",
+                "# . # . # . # # # . . . # # #",
+                "# . # . # . # . . . # # # # #" ,
+                "# . # . # . # . # . # . . . #",
+                "# . # . # . . . # # # . # . #",
+                "# . # . # . # # . . . . # # #",
+                "# . . . . . . . . # # # # # #",
+                "# . # # # # # # . . . . # # #",
+                "# . # . . . # # . # # # # # #",
+                "# . # . # . . . . . . . # # #",
+                "# # # S # # # # # # # # # # #"            
+            };
+            SetFinishPosition(yFinish, xFinish, mazeLines);
+
+            var expectedXPos = xFinish;
+            var expectedYPos = yFinish;
+
+            _mazeSolver.MazeStateChangeEvent += gameState =>
+            {
+                Assert.That(gameState.MoveCounter, Is.LessThanOrEqualTo(10000));
+                Console.WriteLine(gameState);
+                _latestgameState = gameState;
+            };
+
+            _mazeSolver.SolveMaze(mazeLines, new CleverMazeWalker());
+
+            AssertGameState(expectedYPos, expectedXPos);
+        }
+
+        private static void SetFinishPosition(int yFinish, int xFinish, string[] mazeLines)
+        {
+            var chars = mazeLines[yFinish].ToCharArray();
+            chars[xFinish*2] = 'F';
+            mazeLines[yFinish] = new String(chars);
         }
 
         private void AssertGameState(int expectedYPos, int expectedXPos)

@@ -27,7 +27,7 @@ namespace MazeSolver
             }
             MoveForward();
 
-            if (CanMoveForward() == true && CanTurnRight())
+            if(CanTurnRight())
             {
                 var desiredRightTurnPosition = new Point(_orientatedWalk.GetDesiredRightTurnPosition(_mazeGrid, CurrentPosition));
                 if (IsVisitedPoint(desiredRightTurnPosition)==false)
