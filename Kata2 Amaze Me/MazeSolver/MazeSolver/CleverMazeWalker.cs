@@ -1,10 +1,15 @@
-﻿namespace MazeSolver
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace MazeSolver
 {
-    public class DumbMazeWalker : IWalkTheMaze
+    public class CleverMazeWalker : IWalkTheMaze
     {
         private  MazeGrid _mazeGrid;
         private OrientatedWalk _orientatedWalk;
         public Point CurrentPosition { get; set; }
+        private List<Point> _visitedPositions = new List<Point>();
+
 
         public void SetMazeGrid(MazeGrid mazegrid)
         {
@@ -21,7 +26,23 @@
                 return;
             }
             MoveForward();
+
+            if (CanMoveForward() == true && CanTurnRight())
+            {
+                var desiredRightTurnPosition = new Point(_orientatedWalk.GetDesiredRightTurnPosition(_mazeGrid, CurrentPosition));
+                if (IsVisitedPoint(desiredRightTurnPosition)==false)
+                {
+                    TurnRight();
+                    return;
+                }
+            }
+            
             TurnLeftIfPossible();
+        }
+
+        private bool IsVisitedPoint(Point desiredPoint)
+        {
+            return _visitedPositions.Any( p => p.X == desiredPoint.X && p.Y == desiredPoint.Y);
         }
 
 
@@ -30,15 +51,19 @@
             return _orientatedWalk.CanSeeLeftTurning(CurrentPosition, _mazeGrid);
         }
 
-
-        private void TurnRight()
+        private bool CanTurnRight()
         {
-            _orientatedWalk = _orientatedWalk.TurnRight();
+            return _orientatedWalk.CanSeeRightTurning(CurrentPosition, _mazeGrid);
         }
 
         private void TurnLeft()
         {
             _orientatedWalk = _orientatedWalk.TurnLeft();
+        }
+
+        private void TurnRight()
+        {
+            _orientatedWalk = _orientatedWalk.TurnRight();
         }
 
         private bool CanMoveForward()
@@ -49,6 +74,7 @@
         private void MoveForward()
         {
             CurrentPosition = new Point(_orientatedWalk.GetDesiredForwardPosition(CurrentPosition));
+            _visitedPositions.Add(CurrentPosition);
         }
 
 

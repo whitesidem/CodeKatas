@@ -1,4 +1,6 @@
-﻿namespace MazeSolver
+﻿using System;
+
+namespace MazeSolver
 {
     public class GameState
     {
@@ -9,6 +11,11 @@
         {
             MoveCounter = moveCounter;
             CurrentPosition = currentPosition;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("Move: {0}, YPos = {1}, Xpos = {2}", MoveCounter, CurrentPosition.Y, CurrentPosition.X);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace MazeSolver
         public int X { get; private set; }
         public int Y { get; private set; }
 
-        public Point(int x, int y)
+        public Point(int y, int x)
         {
             X = x;
             Y = y;
@@ -21,7 +21,7 @@ namespace MazeSolver
 
         public override string ToString()
         {
-            return String.Format("Point({0}, {1})", X, Y);
+            return String.Format("Point(Y={0}, X={1})",  Y, X);
         }
     }
 }

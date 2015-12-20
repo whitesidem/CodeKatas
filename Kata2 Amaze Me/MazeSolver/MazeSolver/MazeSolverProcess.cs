@@ -35,20 +35,7 @@ namespace MazeSolver
                 mazeWalker.MakeMove();
                 gameState = new GameState(gameState.MoveCounter+1, mazeWalker.CurrentPosition);
                 OnMazeStateChange(gameState);
-                //if (!couldMoveForward)
-                //{
-                //    entity.TurnRight();
-                //}
-                //else
-                //{
-                //    if (entity.CanSeeLeftTurning())
-                //    {
-                //        entity.TurnLeft();
-                //    }
-                //}
-
                 endOfMazeReached = maze.AtFinish(mazeWalker.CurrentPosition);
-//                Console.WriteLine(mazeWalker.CurrentPosition);
             }
         }
 

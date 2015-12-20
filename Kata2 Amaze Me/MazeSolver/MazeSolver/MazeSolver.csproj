@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CleverMazeWalker.cs" />
     <Compile Include="DumbMazeWalker.cs" />
     <Compile Include="Factories\CreateMazefactory.cs" />
     <Compile Include="GameState.cs" />

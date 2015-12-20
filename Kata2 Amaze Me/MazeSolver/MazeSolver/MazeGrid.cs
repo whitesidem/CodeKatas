@@ -28,6 +28,12 @@ namespace MazeSolver
             _finish = CalculateFinishPosition();
         }
 
+        public bool IsValidPosition(Point desiredPoint)
+        {
+            return desiredPoint.X >= 0 && desiredPoint.Y >= 0 && desiredPoint.X <= _cols - 1 &&
+                   desiredPoint.Y <= _rows - 1;
+        }
+
         private Point CalculateStartPosition()
         {
             var start = FindMazeItemByType<StartPosMazeItem>();
@@ -66,7 +72,7 @@ namespace MazeSolver
         {
             var yLimit = Enumerable.Range(0, _rows);
             var xLimit = Enumerable.Range(0, _cols);
-            var item = xLimit.SelectMany(x => yLimit.Where(y => _grid[y][x] is T).Select(y => new Point(x, y))).FirstOrDefault();
+            var item = xLimit.SelectMany(x => yLimit.Where(y => _grid[y][x] is T).Select(y => new Point(y,x))).FirstOrDefault();
             return item;
         }
 
@@ -75,8 +81,8 @@ namespace MazeSolver
         {
             var yLimit = Enumerable.Range(0, _rows);
             var xLimit = Enumerable.Range(0, _cols);
-            var all = xLimit.SelectMany(x => yLimit.Select(y => new { item = _grid[y][x], x, y }));
-            all.ToList().ForEach(a => { Console.WriteLine("coord{0},{1}:{2}", a.x, a.y, a); });
+            var all = xLimit.SelectMany(x => yLimit.Select(y => new { item = _grid[y][x], y, x }));
+            all.ToList().ForEach(a => { Console.WriteLine("coord y={0},x={1}:{2}", a.x, a.y, a); });
         }
     }
 

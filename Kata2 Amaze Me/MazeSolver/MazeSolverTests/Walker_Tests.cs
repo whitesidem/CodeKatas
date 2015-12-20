@@ -8,6 +8,11 @@ namespace MazeSolverTests
     {
         private MazeSolverProcess _mazeSolver;
         private GameState _latestgameState;
+        private static readonly IWalkTheMaze[] AllWalkers =
+        {
+            new DumbMazeWalker(),
+            new CleverMazeWalker()
+        };
 
         [SetUp]
         public void SetUp()
@@ -16,8 +21,8 @@ namespace MazeSolverTests
             _latestgameState = null;
         }
 
-        [Test]
-        public void SolveSimpleMaze_WithDumbWalker()
+        [Test][TestCaseSource("AllWalkers")]
+        public void SolveSimpleMaze_WithWalker(IWalkTheMaze mazeWalker)
         {
             var mazeLines = new string[]
             {
@@ -31,18 +36,18 @@ namespace MazeSolverTests
 
             _mazeSolver.MazeStateChangeEvent += gameState =>
             {
-                Assert.That(gameState.MoveCounter, Is.LessThanOrEqualTo(expectedMoveCount));
-                Console.WriteLine(gameState.CurrentPosition);
+                Assert.That(gameState.MoveCounter, Is.LessThanOrEqualTo(1000));
+                Console.WriteLine(gameState);
                 _latestgameState = gameState;
             };
 
-            _mazeSolver.SolveMaze(mazeLines, new DumbMazeWalker());
+            _mazeSolver.SolveMaze(mazeLines, mazeWalker);
 
-            AssertGameState(expectedYPos, expectedXPos, expectedMoveCount);
+            AssertGameState(expectedYPos, expectedXPos);
         }
 
-        [Test]
-        public void SolveMaze1_WithDumbWalker()
+        [Test][TestCaseSource("AllWalkers")]
+        public void SolveMaze1_WithWalker(IWalkTheMaze mazeWalker)
         {
             var mazeLines = new string[]
             {
@@ -55,22 +60,52 @@ namespace MazeSolverTests
             };
             var expectedYPos = 3;
             var expectedXPos = 5;
-            var expectedMoveCount = 13;
 
             _mazeSolver.MazeStateChangeEvent += gameState =>
             {
-                Assert.That(gameState.MoveCounter, Is.LessThanOrEqualTo(expectedMoveCount));
-                Console.WriteLine(gameState.CurrentPosition);
+                Assert.That(gameState.MoveCounter, Is.LessThanOrEqualTo(1000));
+                Console.WriteLine(gameState);
                 _latestgameState = gameState;
             };
 
-            _mazeSolver.SolveMaze(mazeLines, new DumbMazeWalker());
+            _mazeSolver.SolveMaze(mazeLines, mazeWalker);
 
-            AssertGameState(expectedYPos, expectedXPos, expectedMoveCount);
+            AssertGameState(expectedYPos, expectedXPos);
         }
 
         [Test]
-        public void CanotSolveMaze2_WithDumbWalker()
+        public void SolveMaze2_WithCleverWalker()
+        {
+            var mazeLines = new string[]
+            {
+                "# # # # # # #",
+                "# # # S # # #",
+                "# # # . # # #",
+                "# . . . . . #",
+                "# . # # # . #",
+                "# . # F # . #",
+                "# . # . # . #",
+                "# . . . . . #",
+                "# # # # # # #"            
+            };
+            var expectedXPos = 3;
+            var expectedYPos = 5;
+            var expectedMoveCount = 14;
+
+            _mazeSolver.MazeStateChangeEvent += gameState =>
+            {
+                Assert.That(gameState.MoveCounter, Is.LessThanOrEqualTo(1000));
+                Console.WriteLine(gameState);
+                _latestgameState = gameState;
+            };
+
+            _mazeSolver.SolveMaze(mazeLines, new CleverMazeWalker());
+
+            AssertGameState(expectedYPos, expectedXPos);
+        }
+
+        [Test]
+        public void CannotSolveMaze2_WithDumbWalker()
         {
             var mazeLines = new string[]
             {
@@ -97,12 +132,14 @@ namespace MazeSolverTests
             Assert.Fail("Should not reach here as it cannot solve this maze");
         }
 
-        private void AssertGameState(int expectedYPos, int expectedXPos, int expectedMoveCount)
+        private void AssertGameState(int expectedYPos, int expectedXPos)
         {
             Assert.That(_latestgameState, Is.Not.Null);
-            Assert.That(_latestgameState.CurrentPosition.Y, Is.EqualTo(expectedYPos));
-            Assert.That(_latestgameState.CurrentPosition.X, Is.EqualTo(expectedXPos));
-            Assert.That(_latestgameState.MoveCounter, Is.EqualTo(expectedMoveCount));
+            Assert.That(_latestgameState.CurrentPosition.Y, Is.EqualTo(expectedYPos), "unexpecte end Y pos");
+            Assert.That(_latestgameState.CurrentPosition.X, Is.EqualTo(expectedXPos), "unexpecte end X pos");
         }
+
+
+
     }
 }
