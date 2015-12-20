@@ -37,7 +37,7 @@ namespace MazeSolver
 
         private void DumbMaze(string[] mazeLines)
         {
-            MazePresenter mazePresenter = new MazePresenter(mazeLines, 50);
+            MazePresenter mazePresenter = new MazePresenter(mazeLines, 50, "Dumb Walker");
             mazePresenter.DisplayMaze();
             var mazeSolver = new MazeSolverProcess();
             mazeSolver.MazeStateChangeEvent += mazePresenter.DisplayMove;
@@ -46,7 +46,7 @@ namespace MazeSolver
 
         private void CleverMaze(string[] mazeLines)
         {
-            MazePresenter mazePresenter = new MazePresenter(mazeLines, 0);
+            MazePresenter mazePresenter = new MazePresenter(mazeLines, 5, "Smart Walker");
             mazePresenter.DisplayMaze();
             var mazeSolver = new MazeSolverProcess();
             mazeSolver.MazeStateChangeEvent += mazePresenter.DisplayMove;
